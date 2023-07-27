@@ -76,3 +76,5 @@ gem "omniauth-google-oauth2", "~> 1.1"
 
 gem "devise", "~> 4.9"
 gem "dotenv-rails", "~> 2.8"
+
+gem "omniauth-rails_csrf_protection", "~> 1.0"
