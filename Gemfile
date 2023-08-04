@@ -41,6 +41,8 @@ gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 
+gem 'geocoder'
+
 # Use Sass to process CSS
 # gem "sassc-rails"
 
@@ -55,7 +57,9 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+
   gem 'letter_opener'
+
   gem 'annotate'
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
   # gem "rack-mini-profiler"
@@ -76,6 +80,7 @@ gem "omniauth", "~> 2.1"
 gem "omniauth-google-oauth2", "~> 1.1"
 
 gem "devise", "~> 4.9"
+
 gem "dotenv-rails", "~> 2.8"
 
 gem "omniauth-rails_csrf_protection", "~> 1.0"

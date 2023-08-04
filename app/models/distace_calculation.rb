@@ -14,4 +14,17 @@
 class DistaceCalculation < ApplicationRecord
   validates :address_1, presence: true
   validates :address_2, presence: true
+  validate :validate_addresses_are_real
+
+  private
+
+  def validate_addresses_are_real
+    return if valid_address?(address_1) && valid_address?(address_2)
+  end
+
+  def valid_address?(address)
+    # Use the geocoder gem to check if the address is valid
+    results = Geocoder.search(address)
+    !results.empty?
+  end
 end
