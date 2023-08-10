@@ -29,4 +29,8 @@ class DistanceCalculationsController < ApplicationController
     @distance_calculation.destroy
     redirect_to distance_calculations_url, notice: 'Distance calculation was successfully destroyed.'
   end
+
+  def find_distance_calculation
+    @distance_calculation = DistanceCalculation.find(params[:id])
+  end  
 end

@@ -49,6 +49,9 @@ gem 'geocoder'
 
 gem 'byebug'
 
+gem 'webpacker', '~> 5.0'
+
+
 # Use Sass to process CSS
 # gem "sassc-rails"
 
