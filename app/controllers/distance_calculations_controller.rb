@@ -13,15 +13,20 @@ class DistanceCalculationsController < ApplicationController
   end
 
   def create
-    result = CalculateDistance.call(distance_calculation_params)
-
-    if result.success?
-      @distance_calculation = DistanceCalculation.create!(distance_calculation_params.merge(distance: result.distance))
+    @distance_calculation = DistanceCalculation.new(distance_calculation_params)
+  
+    if @distance_calculation.save
       render json: { distance_calculation: @distance_calculation }, status: :created
     else
-      render json: { error: result.message }, status: :unprocessable_entity
+      render json: { errors: @distance_calculation.errors }, status: :unprocessable_entity
     end
   end
+  
+  private
+  
+  def distance_calculation_params
+    params.require(:distance_calculation).permit(:street_1, :city_1, :state_1, :zip_1, :lat_1, :lng_1, :street_2, :city_2, :state_2, :zip_2,
+  
 
   def edit
   end
@@ -45,8 +50,12 @@ class DistanceCalculationsController < ApplicationController
     @distance_calculation = DistanceCalculation.find(params[:id])
   end
 
+  def format_address(street, city, state, zip)
+  [street, city, state, zip].join(', ')
+  end
+
   def distance_calculation_params
-    params.require(:distance_calculation).permit(:address_1, :address_2)
+    params.require(:distance_calculation).permit(:street_1, :city_1, :state_1, :zip_1, :lat_1, :lng_1, :street_2, :city_2, :state_2, :zip_2, :lat_2, :lng_2)
   end
 end
 

@@ -47,6 +47,8 @@ gem 'google_maps_service'
 
 gem 'geocoder'
 
+gem 'byebug'
+
 # Use Sass to process CSS
 # gem "sassc-rails"
 

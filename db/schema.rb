@@ -11,12 +11,20 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2023_08_03_233410) do
-  create_table "distace_calculations", force: :cascade do |t|
-    t.string "address_1"
-    t.string "address_2"
-    t.decimal "lat", precision: 10, scale: 6, null: false
-    t.decimal "lng", precision: 10, scale: 6, null: false
-    t.string "distance"
+  create_table "distance_calculations", force: :cascade do |t|
+    t.string "street_1"
+    t.string "city_1"
+    t.string "state_1"
+    t.string "zip_1"
+    t.decimal "lat_1", precision: 10, scale: 6, null: false
+    t.decimal "lng_1", precision: 10, scale: 6, null: false
+    t.string "street_2"
+    t.string "city_2"
+    t.string "state_2"
+    t.string "zip_2"
+    t.decimal "lat_2", precision: 10, scale: 6, null: false
+    t.decimal "lng_2", precision: 10, scale: 6, null: false
+    t.decimal "distance", precision: 10, scale: 2
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
