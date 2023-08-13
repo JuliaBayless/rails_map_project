@@ -3,7 +3,7 @@ import "@hotwired/turbo-rails"
 import "controllers"
 import React from 'react';
 import ReactDOM from 'react-dom';
-import WelcomeComponent from '../packs/WelcomeComponent'
+import WelcomeComponent from '../components/WelcomeComponent'
 
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(

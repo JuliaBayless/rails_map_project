@@ -5,6 +5,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
+// import WelcomeComponent from '../components/WelcomeComponent'
 
 const Hello = props => (
   <div>Hello {props.name}!</div>
@@ -20,7 +21,7 @@ Hello.propTypes = {
 
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
-    <WelcomeComponent />,
+<Hello name="React" />,
     document.body.appendChild(document.createElement('div')),
   )
 })

@@ -51,6 +51,9 @@ default: &default
 development:
   <<: *default
   compile: true
+  entry:
+    - 'application.js'
+    # - 'application.scss'
 
   # Reference: https://webpack.js.org/configuration/dev-server/
   dev_server:
