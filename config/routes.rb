@@ -4,9 +4,9 @@ Rails.application.routes.draw do
     sessions: 'users/sessions'
   }
 
-  get 'welcome', to: 'welcome#index', as: :welcome
+  resources :distance_calculations, only: [:create]
 
-  root to: 'static_pages#home'
-  resources :distance_calculations, only: [:create] 
+  root to: 'application#react_app'
+  get '*path', to: 'application#react_app', constraints: ->(request){ request.format.html? }
 
 end
