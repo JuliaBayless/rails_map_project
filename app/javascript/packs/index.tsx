@@ -5,15 +5,20 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import App from '../src/App'
 
 const container = document.getElementById('root');
 const root = createRoot(container);
+const queryClient = new QueryClient();
+
 
 document.addEventListener('DOMContentLoaded', () => {
   root.render(
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>,
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>,
+    </QueryClientProvider>
   )
 })

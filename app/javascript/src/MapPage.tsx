@@ -2,18 +2,11 @@ import React, { useState, useEffect, useRef, FormEvent } from 'react';
 import { createUseStyles } from 'react-jss';
 import AddressForm from './components/map/AddressForm'
 import { parseDistanceToDecimal } from './utilities';
+import { RouteData } from './types';
+import { useMutation } from 'react-query';
+import { saveRouteData } from './api/distanceCalculations';
 
 declare var google: any;
-interface RouteData {
-  address_1: string;
-  lat_1: number;
-  lng_1: number;
-  address_2: string;
-  lat_2: number;
-  lng_2: number;
-  distance: number;
-  title: string;
-}
 
 const initialRouteData: RouteData = {
   address_1: '',
@@ -96,10 +89,19 @@ const MapPage: React.FC = () => {
       setRouteData(prevData => ({ ...prevData, title: newTitle }));
     }
     
+    const mutation = useMutation(saveRouteData, {
+      onSuccess: (data) => {
+        console.log('Data saved successfully!', data);
+      },
+      onError: (error) => {
+        console.error('Error saving data:', error);
+      }
+    });
 
     const handleSaveToAddressBook = (e: FormEvent) => {
       e.preventDefault();
       console.log('save to address book', routeData);
+      mutation.mutate(routeData);
     }
 
     return (
