@@ -1,8 +1,30 @@
 import React, { useState, useEffect, useRef, FormEvent } from 'react';
 import { createUseStyles } from 'react-jss';
 import AddressForm from './components/map/AddressForm'
+import { parseDistanceToDecimal } from './utilities';
 
 declare var google: any;
+interface RouteData {
+  address_1: string;
+  lat_1: number;
+  lng_1: number;
+  address_2: string;
+  lat_2: number;
+  lng_2: number;
+  distance: number;
+  title: string;
+}
+
+const initialRouteData: RouteData = {
+  address_1: '',
+  lat_1: 0,
+  lng_1: 0,
+  address_2: '',
+  lat_2: 0,
+  lng_2: 0,
+  distance: 0,
+  title: '',
+}
 
 const MapPage: React.FC = () => {
     const mapRef = useRef<HTMLDivElement>(null);
@@ -10,7 +32,7 @@ const MapPage: React.FC = () => {
 
     const [distance, setDistance] = useState<string>('');
     const [showSaveOption, setShowSaveOption] = useState<boolean>(false);
-    const [title, setTitle] = useState<string>('')
+    const [routeData, setRouteData] = useState<RouteData>(initialRouteData);
 
 
     useEffect(() => {
@@ -44,11 +66,24 @@ const MapPage: React.FC = () => {
                         })
                     });
                     directionsRenderer.setDirections(response);
-                    //get distance
-                    const routeDistance = response.routes[0].legs[0].distance.text;
-                    setDistance(routeDistance);
-                    setShowSaveOption(true);
+                    const routeDistance = parseDistanceToDecimal(response.routes[0].legs[0].distance.text);
+                    const startLocation = response.routes[0].legs[0].start_location;
+                    const endLocation = response.routes[0].legs[0].end_location;
 
+
+                    setRouteData(prevData => ({
+                      ...prevData,
+                      address_1: start,
+                      lat_1: startLocation.lat(),
+                      lng_1: startLocation.lng(),
+                      address_2: end,
+                      lat_2: endLocation.lat(),
+                      lng_2: endLocation.lng(),
+                      distance: routeDistance
+                    }));
+
+                    setShowSaveOption(true);
+                    setDistance(response.routes[0].legs[0].distance.text);
                 } else {
                     window.alert('Directions request failed due to ' + status);
                 }
@@ -56,9 +91,15 @@ const MapPage: React.FC = () => {
         );
     };
 
+    const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newTitle = e.target.value;
+      setRouteData(prevData => ({ ...prevData, title: newTitle }));
+    }
+    
+
     const handleSaveToAddressBook = (e: FormEvent) => {
-        e.preventDefault();
-        console.log('save to address book');
+      e.preventDefault();
+      console.log('save to address book', routeData);
     }
 
     return (
@@ -69,8 +110,8 @@ const MapPage: React.FC = () => {
             <input
               className={classes.input}
               type="text"
-              value={title}
-              onChange={e => setTitle(e.target.value)}
+              value={routeData.title}
+              onChange={handleTitleChange}
               placeholder="Title for this route" />
             <button className={classes.btn} onClick={handleSaveToAddressBook}>Save to Address Book</button>
           </div>
