@@ -34,5 +34,3 @@ RSpec.describe DistanceCalculationsController, type: :controller do
     end
   end
 end
-
-
