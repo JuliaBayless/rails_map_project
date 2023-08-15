@@ -10,7 +10,7 @@ class DistanceCalculationsController < ApplicationController
   end
 
   def create
-    @distance_calculation = DistanceCalculation.new(distance_calculation_params)
+    @distance_calculation = current_user.distance_calculations.build(distance_calculation_params)
 
     if @distance_calculation.save
       render json: { distance_calculation: @distance_calculation }, status: :created

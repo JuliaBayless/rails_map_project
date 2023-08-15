@@ -26,6 +26,11 @@ RSpec.describe DistanceCalculationsController, type: :controller do
         }.to change(DistanceCalculation, :count).by(1)
       end
 
+      it 'associates the created distance calculation with the signed in user' do
+        post :create, params: { distance_calculation: valid_params }
+        expect(DistanceCalculation.last.user).to eq(user)
+      end
+
       it 'saves with correct attributes' do
         post :create, params: { distance_calculation: valid_params }
         latest_distance_calculation = DistanceCalculation.order(created_at: :desc).first

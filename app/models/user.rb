@@ -45,4 +45,5 @@ class User < ApplicationRecord
       validates :uid, presence: true
     end
   end
+  has_many :distance_calculations
 end

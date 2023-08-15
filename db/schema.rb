@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_03_233410) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_15_024432) do
   create_table "distance_calculations", force: :cascade do |t|
     t.string "address_1"
     t.decimal "lat_1", precision: 10, scale: 6, null: false
@@ -22,6 +22,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_03_233410) do
     t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["user_id"], name: "index_distance_calculations_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -54,4 +56,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_03_233410) do
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
+  add_foreign_key "distance_calculations", "users"
 end
