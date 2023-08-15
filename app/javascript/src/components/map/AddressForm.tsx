@@ -8,19 +8,31 @@ interface IProps {
 
 const AddressForm: React.FC<IProps> = ({ onValidSubmit }) => {
     const classes = useStyles();
+    const googleMapsKey = process.env.GOOGLE_MAPS_API_KEY;
 
     const [startAddress, setStartAddress] = useState<string>('');
     const [endAddress, setEndAddress] = useState<string>('');
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const isValidAddress = async (address: string): Promise<boolean> => {
+        const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${googleMapsKey}`);
+        const data = await response.json();
+        return data.status === 'OK' && data.results && data.results.length > 0;
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         
-        if (!startAddress.trim() || !endAddress.trim()) {
-            alert('Please enter valid addresses!');
+        const isValidStartAddress = await isValidAddress(startAddress);
+        const isValidEndAddress = await isValidAddress(endAddress);
+
+        if (!isValidStartAddress) {
+            alert('Google does not recogonize your starting address. Please enter a valid addresses to proceed!');
             return;
         }
-
-        // Advanced validation can go here...
+        if (!isValidEndAddress) {
+            alert('Google does not recogonize your ending address. Please enter a valid addresses to proceed!');
+            return;
+        }
 
         onValidSubmit(startAddress, endAddress);
     };
