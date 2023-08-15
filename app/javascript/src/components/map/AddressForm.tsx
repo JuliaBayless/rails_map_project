@@ -53,7 +53,7 @@ const AddressForm: React.FC<IProps> = ({ onValidSubmit }) => {
                 onChange={e => setEndAddress(e.target.value)}
                 placeholder="Ending Address"
             />
-            <input  className={classes.input} type="submit" value="Get Directions" />
+            <input  className={classes.input} style={{width: '25%'}} type="submit" value="Get Directions" />
         </form>
     );
 };
@@ -62,10 +62,13 @@ export default AddressForm;
 
 const useStyles = createUseStyles({
     form: {
-        marginBottom: '20px'
+        marginBottom: '20px',
+        display: 'flex',
+        flexDirection: 'column',
+        width: '40%',
     },
     input: {
-        marginRight: '10px',
+        marginBottom: '10px',
         padding: '8px',
         borderRadius: '4px',
         border: '1px solid #ccc',
