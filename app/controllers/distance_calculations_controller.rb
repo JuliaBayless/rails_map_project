@@ -11,18 +11,19 @@ class DistanceCalculationsController < ApplicationController
 
   def create
     @distance_calculation = DistanceCalculation.new(distance_calculation_params)
-  
+
     if @distance_calculation.save
       render json: { distance_calculation: @distance_calculation }, status: :created
     else
       render json: { errors: @distance_calculation.errors }, status: :unprocessable_entity
     end
   end
-  
+
   private
   
   def distance_calculation_params
-    params.require(:distance_calculation).permit(:street_1, :city_1, :state_1, :zip_1, :lat_1, :lng_1, :street_2, :city_2, :state_2, :zip_2, :lat_2, :lng_2, :distance)
+    # Updated permitted parameters to match new migration
+    params.require(:distance_calculation).permit(:address_1, :lat_1, :lng_1, :address_2, :lat_2, :lng_2, :distance, :title, :id)
   end
 
   def destroy
