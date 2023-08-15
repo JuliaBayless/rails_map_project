@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useRef, FormEvent } from 'react';
+import { createUseStyles } from 'react-jss';
+import AddressForm from './components/map/AddressForm'
 
 declare var google: any;
 
 const MapPage: React.FC = () => {
     const mapRef = useRef<HTMLDivElement>(null);
+    const classes = useStyles();
+
     const [startAddress, setStartAddress] = useState<string>('');
     const [endAddress, setEndAddress] = useState<string>('');
 
@@ -45,31 +49,24 @@ const MapPage: React.FC = () => {
         );
     };
 
-    const formSubmitHandler = (e: FormEvent) => {
-        e.preventDefault();
-        getDirections(startAddress, endAddress);
-    };
-
     return (
-        <div>
-            <form onSubmit={formSubmitHandler}>
-                <input
-                    type="text"
-                    value={startAddress}
-                    onChange={e => setStartAddress(e.target.value)}
-                    placeholder="Starting Address"
-                />
-                <input
-                    type="text"
-                    value={endAddress}
-                    onChange={e => setEndAddress(e.target.value)}
-                    placeholder="Ending Address"
-                />
-                <input type="submit" value="Get Directions" />
-            </form>
-            <div ref={mapRef} style={{ height: '500px', width: '100%' }}></div>
-        </div>
+      <div className={classes.container}>
+      <AddressForm onValidSubmit={(start, end) => getDirections(start, end)} />
+      <div className={classes.mapDiv} ref={mapRef}></div>
+  </div>
+
     );
 };
 
 export default MapPage;
+
+const useStyles = createUseStyles({
+  container: {
+      padding: '20px'
+  },
+  mapDiv: {
+      height: '500px',
+      width: '100%',
+      border: '1px solid #ddd'
+  }
+});
