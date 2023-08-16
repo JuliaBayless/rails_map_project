@@ -3,6 +3,7 @@ Rails.application.routes.draw do
     omniauth_callbacks: 'users/omniauth_callbacks',
     sessions: 'users/sessions'
   }
+  get 'current_user_info', to: 'users#current_user_info'
 
   resources :users do
     get 'addresses', to: 'distance_calculations#addresses'

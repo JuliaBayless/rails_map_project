@@ -10,7 +10,7 @@ export const saveRouteData = async (routeData: RouteData) => {
     return response.data;
 };
 
-export const fetchUserAddresses = async (userId: number) => {
+export const fetchUserAddresses = async (userId: number): Promise<RouteData[]> => {
     const csrfToken = getCsrfToken();
     axios.defaults.headers.common["X-CSRF-Token"] = csrfToken;
 

@@ -5,11 +5,12 @@ import { getCurrentUserId } from './api/users';
 
 const ListPage = () => {
   const [addresses, setAddresses] = useState([]);
-  const userId = getCurrentUserId();
+  
 
   useEffect(() => {
     const fetchAddresses = async () => {
       try {
+        const userId = await getCurrentUserId();
         const data = await fetchUserAddresses(userId);
         setAddresses(data);
       } catch (error) {
@@ -18,7 +19,7 @@ const ListPage = () => {
     };
 
     fetchAddresses();
-  }, [userId]);
+  }, []);
 
   
   return (
