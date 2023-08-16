@@ -122,9 +122,8 @@ const MapPage: React.FC = () => {
 
   const saveMutation = useMutation(saveRouteData);
 
-  const updateMutation = useMutation(
-    (newRouteData: RouteData) =>
-      updateUserAddress(Number(routeId), newRouteData)
+  const updateMutation = useMutation((newRouteData: RouteData) =>
+    updateUserAddress(Number(routeId), newRouteData),
   );
 
   const handleSaveToAddressBook = (e: FormEvent) => {
@@ -142,7 +141,7 @@ const MapPage: React.FC = () => {
       <div className={classes.container}>
         <AddressForm
           onValidSubmit={(start, end) => {
-            getDirections(start, end)
+            getDirections(start, end);
           }}
           startAddress={routeData.address_1 || ""}
           endAddress={routeData.address_2 || ""}
@@ -158,10 +157,7 @@ const MapPage: React.FC = () => {
               onChange={handleTitleChange}
               placeholder="Title for this route"
             />
-            <button
-              className={classes.btn}
-              onClick={handleSaveToAddressBook}
-            >
+            <button className={classes.btn} onClick={handleSaveToAddressBook}>
               {routeId ? "Update Address" : "Save to Address Book"}
             </button>
           </div>
