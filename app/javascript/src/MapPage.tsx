@@ -5,6 +5,7 @@ import { parseDistanceToDecimal } from './utilities';
 import { RouteData } from './types';
 import { useMutation } from 'react-query';
 import { saveRouteData } from './api/distanceCalculations';
+import { useNavigate } from 'react-router-dom';
 
 declare var google: any;
 
@@ -92,6 +93,7 @@ const MapPage: React.FC = () => {
     const mutation = useMutation(saveRouteData, {
       onSuccess: (data) => {
         console.log('Data saved successfully!', data);
+
       },
       onError: (error) => {
         console.error('Error saving data:', error);

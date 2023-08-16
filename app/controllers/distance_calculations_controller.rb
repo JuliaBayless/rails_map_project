@@ -19,8 +19,15 @@ class DistanceCalculationsController < ApplicationController
     end
   end
 
+  def addresses
+    user = User.find(params[:user_id])
+    @addresses = user.distance_calculations
+
+    render json: @addresses
+  end
+
   private
-  
+
   def distance_calculation_params
     # Updated permitted parameters to match new migration
     params.require(:distance_calculation).permit(:address_1, :lat_1, :lng_1, :address_2, :lat_2, :lng_2, :distance, :title, :id)
@@ -33,5 +40,5 @@ class DistanceCalculationsController < ApplicationController
 
   def find_distance_calculation
     @distance_calculation = DistanceCalculation.find(params[:id])
-  end  
+  end
 end
