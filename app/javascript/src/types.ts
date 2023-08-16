@@ -5,6 +5,13 @@
     address_2: string;
     lat_2: number;
     lng_2: number;
-    distance: number;
+    distance: number | string;
     title: string;
   }
+
+export interface Address extends RouteData {
+  id: number;
+  updated_at: string;
+  created_at: string;
+  user_id: number;
+}

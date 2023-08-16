@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { fetchUserAddresses } from './api/distanceCalculations';
 import { getCurrentUserId } from './api/users';
+import { formatDistanceFromDecimal } from './utilities';
 
 
 const ListPage = () => {
@@ -27,7 +28,7 @@ const ListPage = () => {
     <h1>List Page!</h1>
     {addresses.map((address, index) => (
       <div key={index}>
-        {address.address_1} to {address.address_2} - Distance: {address.distance} miles
+        {address.address_1} to {address.address_2} - Distance: {formatDistanceFromDecimal(address.distance)} miles
       </div>
     ))}
   </div>

@@ -5,3 +5,7 @@ export const parseDistanceToDecimal = (distanceStr: string): number => {
     }
     return numericPart;
   };
+
+export const formatDistanceFromDecimal = (distanceKm: number): string => {
+    return (distanceKm / 1.60934).toFixed(2) + ' mi';
+};
