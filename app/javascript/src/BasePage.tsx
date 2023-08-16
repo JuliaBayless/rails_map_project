@@ -1,6 +1,6 @@
-import React from 'react';
-import BackButton from './components/BackButton';
-import { createUseStyles } from 'react-jss';
+import React from "react";
+import BackButton from "./components/BackButton";
+import { createUseStyles } from "react-jss";
 
 interface PageProps {
   children: React.ReactNode;
@@ -16,9 +16,7 @@ export default function BasePage({ children, backBtn }: PageProps) {
         <h1 className={classes.title}>Distance Calculator</h1>
         {backBtn && <BackButton />}
       </header>
-      <div className={classes.content}>
-        {children}
-      </div>
+      <div className={classes.content}>{children}</div>
     </div>
   );
 }
@@ -29,25 +27,25 @@ BasePage.defaultProps = {
 
 const useStyles = createUseStyles({
   container: {
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'column',
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
   },
   pageHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: '#000080',
-    padding: '10px 40px',
-    height: '60px',
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#000080",
+    padding: "10px 40px",
+    height: "60px",
   },
   title: {
     margin: 0,
-    color: 'white',
-    fontSize: '36px',
-    fontFamily: 'Poppins, sans-serif',
+    color: "white",
+    fontSize: "36px",
+    fontFamily: "Poppins, sans-serif",
   },
   content: {
-    padding: '20px',
+    padding: "20px",
   },
 });

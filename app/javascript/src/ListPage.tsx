@@ -1,8 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { fetchUserAddresses, deleteUserAddress, updateUserAddress } from './api/distanceCalculations';
-import { getCurrentUserId } from './api/users';
-import { formatDistanceFromDecimal } from './utilities';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import {
+  fetchUserAddresses,
+  deleteUserAddress,
+  updateUserAddress,
+} from "./api/distanceCalculations";
+import { getCurrentUserId } from "./api/users";
+import { formatDistanceFromDecimal } from "./utilities";
+import { useNavigate } from "react-router-dom";
 
 const ListPage = () => {
   const navigate = useNavigate();
@@ -25,16 +29,17 @@ const ListPage = () => {
   const handleDelete = async (id: number) => {
     try {
       await deleteUserAddress(id);
-      setAddresses(prevAddresses => prevAddresses.filter(address => address.id !== id));
+      setAddresses((prevAddresses) =>
+        prevAddresses.filter((address) => address.id !== id),
+      );
     } catch (error) {
       console.error("Error deleting address:", error);
       alert("Error deleting address, please try again later.");
     }
   };
 
-
   const handleEdit = async (id: number) => {
-    console.log("Edit address with id:", id)
+    console.log("Edit address with id:", id);
     navigate(`/MapPage/${id}`);
   };
 
@@ -66,6 +71,6 @@ const ListPage = () => {
       </table>
     </div>
   );
-}
+};
 
 export default ListPage;
