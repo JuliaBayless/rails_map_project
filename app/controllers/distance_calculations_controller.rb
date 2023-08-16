@@ -1,5 +1,5 @@
 class DistanceCalculationsController < ApplicationController
-  before_action :find_distance_calculation, only: [:show, :edit, :update, :destroy]
+  before_action :find_distance_calculation, only: %i[show update destroy]
 
   def index
     @distance_calculations = DistanceCalculation.all
@@ -19,6 +19,14 @@ class DistanceCalculationsController < ApplicationController
     end
   end
 
+  def show
+    if @distance_calculation.nil?
+      render json: { error: 'Distance calculation not found' }, status: :not_found
+    else
+      render json: @distance_calculation
+    end
+  end
+
   def addresses
     user = User.find(params[:user_id])
     @addresses = user.distance_calculations
@@ -26,19 +34,26 @@ class DistanceCalculationsController < ApplicationController
     render json: @addresses
   end
 
-  private
-
-  def distance_calculation_params
-    # Updated permitted parameters to match new migration
-    params.require(:distance_calculation).permit(:address_1, :lat_1, :lng_1, :address_2, :lat_2, :lng_2, :distance, :title, :id)
+  def update
+    if @distance_calculation.update(distance_calculation_params)
+      render json: { distance_calculation: @distance_calculation }, status: :ok
+    else
+      render json: { errors: @distance_calculation.errors }, status: :unprocessable_entity
+    end
   end
 
   def destroy
     @distance_calculation.destroy
-    redirect_to distance_calculations_url, notice: 'Distance calculation was successfully destroyed.'
+    render json: { message: 'Deleted successfully' }, status: :ok
+  end
+
+  private
+
+  def distance_calculation_params
+    params.require(:distance_calculation).permit(:address_1, :lat_1, :lng_1, :address_2, :lat_2, :lng_2, :distance, :title, :id)
   end
 
   def find_distance_calculation
-    @distance_calculation = DistanceCalculation.find(params[:id])
+    @distance_calculation = DistanceCalculation.find_by(id: params[:id])
   end
 end

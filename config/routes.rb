@@ -9,9 +9,8 @@ Rails.application.routes.draw do
     get 'addresses', to: 'distance_calculations#addresses'
   end
 
-  resources :distance_calculations, only: [:create]
+  resources :distance_calculations, only: %i[show create update destroy]
 
   root to: 'application#react_app'
   get '*path', to: 'application#react_app', constraints: ->(request){ request.format.html? }
-
 end

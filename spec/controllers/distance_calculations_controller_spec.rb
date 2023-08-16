@@ -40,6 +40,38 @@ RSpec.describe DistanceCalculationsController, type: :controller do
     end
   end
 
+  describe 'GET #show' do
+    let(:user) { create(:user) }
+    let!(:distance_calculation) { create(:distance_calculation, user: user) }
+
+    before do
+      sign_in user
+    end
+
+    context 'with valid id' do
+      before do
+        get :show, params: { id: distance_calculation.id }
+      end
+
+      it 'returns the correct distance calculation' do
+        parsed_response = JSON.parse(response.body)
+        expect(parsed_response["id"]).to eq(distance_calculation.id)
+      end
+
+      it 'returns status code 200' do
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    context 'with invalid id' do
+      it 'returns status code 404' do
+        get :show, params: { id: 'invalid_id' }
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+  end
+
+
   describe 'GET #addresses' do
     let!(:user_distance_calculation) { create(:distance_calculation, user: user) }
     let!(:other_distance_calculation) { create(:distance_calculation) } # not associated with user
@@ -57,6 +89,79 @@ RSpec.describe DistanceCalculationsController, type: :controller do
     it 'does not return addresses not associated with the user' do
       returned_addresses = JSON.parse(response.body)
       expect(returned_addresses).not_to include(hash_including('id' => other_distance_calculation.id))
+    end
+  end
+
+  describe 'PUT #update' do
+    let(:user) { create(:user) }
+    let!(:distance_calculation) { create(:distance_calculation, user: user) }
+
+    before do
+      sign_in user
+    end
+
+    context 'with valid parameters' do
+      let(:new_address) { '123 New Address St, New City, ST 12345' }
+      let(:valid_params) do
+        {
+          id: distance_calculation.id,
+          distance_calculation: {
+            address_1: new_address
+          }
+        }
+      end
+
+      it 'updates the distance calculation' do
+        put :update, params: valid_params
+        expect(distance_calculation.reload.address_1).to eq(new_address)
+      end
+
+      it 'returns status code :ok' do
+        put :update, params: valid_params
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    context 'with invalid parameters' do
+      let(:invalid_params) do
+        {
+          id: distance_calculation.id,
+          distance_calculation: {
+            address_1: '' # invalid
+          }
+        }
+      end
+
+      it 'does not update the distance calculation' do
+        original_address = distance_calculation.address_1
+        put :update, params: invalid_params
+        expect(distance_calculation.reload.address_1).to eq(original_address)
+      end
+
+      it 'returns status code :unprocessable_entity' do
+        put :update, params: invalid_params
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    let(:user) { create(:user) }
+    let!(:distance_calculation) { create(:distance_calculation, user: user) }
+
+    before do
+      sign_in user
+    end
+
+    it 'deletes the distance calculation' do
+      expect {
+        delete :destroy, params: { id: distance_calculation.id }
+      }.to change(DistanceCalculation, :count).by(-1)
+    end
+
+    it 'returns status code :ok' do
+      delete :destroy, params: { id: distance_calculation.id }
+      expect(response).to have_http_status(:ok)
     end
   end
 end
