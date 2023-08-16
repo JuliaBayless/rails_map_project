@@ -27,6 +27,14 @@ const App = () => {
         <MapPage />
         </BasePage>
         )}/>
+           <Route 
+      path="/MapPage/:routeId" 
+      element={
+        <BasePage>
+          <MapPage />
+        </BasePage>
+      }
+   />
         <Route 
         path="/list" 
         element={(
@@ -34,7 +42,6 @@ const App = () => {
         <ListPage />
         </BasePage>
         )} />
-        {/* Other routes as needed */}
     </Routes>
   );
 };

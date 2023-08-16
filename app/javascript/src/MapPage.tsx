@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef, FormEvent } from 'react';
 import { createUseStyles } from 'react-jss';
 import AddressForm from './components/map/AddressForm'
-import { parseDistanceToDecimal } from './utilities';
+import { formatDistanceFromDecimal, parseDistanceToDecimal } from './utilities';
 import { RouteData } from './types';
 import { useMutation } from 'react-query';
-import { saveRouteData } from './api/distanceCalculations';
-import { useNavigate } from 'react-router-dom';
+import { fetchAddress, saveRouteData } from './api/distanceCalculations';
+import { useNavigate, useParams } from 'react-router-dom';
 
 declare var google: any;
 
@@ -21,6 +21,7 @@ const initialRouteData: RouteData = {
 }
 
 const MapPage: React.FC = () => {
+  const { routeId } = useParams();
     const mapRef = useRef<HTMLDivElement>(null);
     const classes = useStyles();
 
@@ -33,7 +34,7 @@ const MapPage: React.FC = () => {
         if (mapRef.current) {
             const mapOptions = {
                 zoom: 8,
-                center: { lat: 37.77, lng: -122.42 } // Default to San Francisco for example
+                center: { lat: 44.980553, lng: -93.270035 } // Minneapolis
             };
 
             const map = new google.maps.Map(mapRef.current, mapOptions);
@@ -41,6 +42,22 @@ const MapPage: React.FC = () => {
             directionsRenderer.setMap(map);
         }
     }, []);
+
+    useEffect(() => {
+      if (routeId) {
+          const fetchData = async () => {
+              try {
+                  const data = await fetchAddress(Number(routeId));
+                  getDirections(data.address_1, data.address_2);
+                  setRouteData(data);
+                  setDistance(formatDistanceFromDecimal(Number(data.distance)));
+              } catch (error) {
+                  console.error("Error fetching route data:", error);
+              }
+          };
+          fetchData();
+      }
+  }, [routeId]);
 
     const getDirections = (start: string, end: string) => {
         const directionsService = new google.maps.DirectionsService();
