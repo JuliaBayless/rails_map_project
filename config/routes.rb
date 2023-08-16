@@ -4,6 +4,10 @@ Rails.application.routes.draw do
     sessions: 'users/sessions'
   }
 
+  resources :users do
+    get 'addresses', to: 'distance_calculations#addresses'
+  end
+
   resources :distance_calculations, only: [:create]
 
   root to: 'application#react_app'
