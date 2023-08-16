@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, FormEvent } from "react";
 import { createUseStyles } from "react-jss";
-import AddressForm from "./components/map/AddressForm";
 import { formatDistanceFromDecimal, parseDistanceToDecimal } from "./utilities";
 import { RouteData } from "./types";
 import { useMutation } from "react-query";
@@ -10,6 +9,8 @@ import {
   updateUserAddress,
 } from "./api/distanceCalculations";
 import { useNavigate, useParams } from "react-router-dom";
+import DirectionsForm from "./components/map/DirectionsForm";
+import Map from "./components/map/Map";
 
 declare var google: any;
 
@@ -33,19 +34,6 @@ const MapPage: React.FC = () => {
   const [distance, setDistance] = useState<string>("");
   const [showSaveOption, setShowSaveOption] = useState<boolean>(false);
   const [routeData, setRouteData] = useState<RouteData>(initialRouteData);
-
-  useEffect(() => {
-    if (mapRef.current) {
-      const mapOptions = {
-        zoom: 8,
-        center: { lat: 44.980553, lng: -93.270035 }, // Minneapolis
-      };
-
-      const map = new google.maps.Map(mapRef.current, mapOptions);
-      const directionsRenderer = new google.maps.DirectionsRenderer();
-      directionsRenderer.setMap(map);
-    }
-  }, []);
 
   useEffect(() => {
     if (routeId) {
@@ -138,31 +126,18 @@ const MapPage: React.FC = () => {
 
   return (
     <>
-      <div className={classes.container}>
-        <AddressForm
-          onValidSubmit={(start, end) => {
-            getDirections(start, end);
-          }}
-          startAddress={routeData.address_1 || ""}
-          endAddress={routeData.address_2 || ""}
-          onStartAddressChange={handleStartAddressChange}
-          onEndAddressChange={handleEndAddressChange}
-        />
-        {showSaveOption && (
-          <div className={classes.saveContainer}>
-            <input
-              className={classes.input}
-              type="text"
-              value={routeData.title}
-              onChange={handleTitleChange}
-              placeholder="Title for this route"
-            />
-            <button className={classes.btn} onClick={handleSaveToAddressBook}>
-              {routeId ? "Update Address" : "Save to Address Book"}
-            </button>
-          </div>
-        )}
-      </div>
+      <DirectionsForm
+        onValidSubmit={getDirections}
+        startAddress={routeData.address_1 || ""}
+        endAddress={routeData.address_2 || ""}
+        title={routeData.title}
+        onStartAddressChange={handleStartAddressChange}
+        onEndAddressChange={handleEndAddressChange}
+        handleTitleChange={handleTitleChange}
+        handleSaveToAddressBook={handleSaveToAddressBook}
+        routeId={routeId}
+        showSaveOption={showSaveOption}
+      />
       <div className={classes.distanceContainer}>
         {distance ? (
           <span className={classes.distance}>Distance: {distance}</span>
@@ -172,11 +147,10 @@ const MapPage: React.FC = () => {
           </span>
         )}
       </div>
-      <div className={classes.mapDiv} ref={mapRef}></div>
+      <Map ref={mapRef} />
     </>
   );
 };
-
 export default MapPage;
 
 const useStyles = createUseStyles({
@@ -184,39 +158,6 @@ const useStyles = createUseStyles({
     padding: "20px",
     display: "flex",
     flexDirection: "row",
-  },
-  mapDiv: {
-    height: "500px",
-    width: "100%",
-    border: "1px solid #ddd",
-  },
-  saveContainer: {
-    marginBottom: "20px",
-    marginLeft: "20px",
-    display: "flex",
-    flexDirection: "column",
-    width: "40%",
-  },
-  input: {
-    marginBottom: "10px",
-    padding: "8px",
-    borderRadius: "4px",
-    border: "1px solid #ccc",
-  },
-  btn: {
-    padding: "8px 15px",
-    backgroundColor: "#009a00",
-    color: "#fff",
-    border: "none",
-    borderRadius: "4px",
-    cursor: "pointer",
-    transition: "background-color 0.3s",
-    fontFamily: "outfit, sans-serif",
-    "&:hover": {
-      backgroundColor: "#008100",
-    },
-    alignSelf: "center",
-    width: "80%",
   },
   distanceContainer: {
     margin: "5px",

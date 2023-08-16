@@ -99,7 +99,7 @@ const useStyles = createUseStyles({
     borderCollapse: "collapse",
   },
   header: {
-    backgroundColor: "#3f51b5", 
+    backgroundColor: "#3f51b5",
   },
   row: {
     "&:nth-child(odd)": {
