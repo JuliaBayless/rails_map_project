@@ -4,7 +4,11 @@ import AddressForm from "./components/map/AddressForm";
 import { formatDistanceFromDecimal, parseDistanceToDecimal } from "./utilities";
 import { RouteData } from "./types";
 import { useMutation } from "react-query";
-import { fetchAddress, saveRouteData } from "./api/distanceCalculations";
+import {
+  fetchAddress,
+  saveRouteData,
+  updateUserAddress,
+} from "./api/distanceCalculations";
 import { useNavigate, useParams } from "react-router-dom";
 
 declare var google: any;
@@ -23,6 +27,7 @@ const initialRouteData: RouteData = {
 const MapPage: React.FC = () => {
   const { routeId } = useParams();
   const mapRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
   const classes = useStyles();
 
   const [distance, setDistance] = useState<string>("");
@@ -102,33 +107,47 @@ const MapPage: React.FC = () => {
     );
   };
 
+  const handleStartAddressChange = (address: string) => {
+    setRouteData((prevData) => ({ ...prevData, address_1: address }));
+  };
+
+  const handleEndAddressChange = (address: string) => {
+    setRouteData((prevData) => ({ ...prevData, address_2: address }));
+  };
+
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;
     setRouteData((prevData) => ({ ...prevData, title: newTitle }));
   };
 
-  const mutation = useMutation(saveRouteData, {
-    onSuccess: (data) => {
-      console.log("Data saved successfully!", data);
-    },
-    onError: (error) => {
-      console.error("Error saving data:", error);
-    },
-  });
+  const saveMutation = useMutation(saveRouteData);
+
+  const updateMutation = useMutation(
+    (newRouteData: RouteData) =>
+      updateUserAddress(Number(routeId), newRouteData)
+  );
 
   const handleSaveToAddressBook = (e: FormEvent) => {
     e.preventDefault();
-    console.log("save to address book", routeData);
-    mutation.mutate(routeData);
+    if (routeId) {
+      updateMutation.mutate(routeData);
+    } else {
+      saveMutation.mutate(routeData);
+    }
+    navigate("/list");
   };
 
   return (
     <>
       <div className={classes.container}>
         <AddressForm
-          onValidSubmit={(start, end) => getDirections(start, end)}
-          initialStartAddress={routeData.address_1}
-          initialEndAddress={routeData.address_2}
+          onValidSubmit={(start, end) => {
+            getDirections(start, end)
+          }}
+          startAddress={routeData.address_1 || ""}
+          endAddress={routeData.address_2 || ""}
+          onStartAddressChange={handleStartAddressChange}
+          onEndAddressChange={handleEndAddressChange}
         />
         {showSaveOption && (
           <div className={classes.saveContainer}>
@@ -139,8 +158,11 @@ const MapPage: React.FC = () => {
               onChange={handleTitleChange}
               placeholder="Title for this route"
             />
-            <button className={classes.btn} onClick={handleSaveToAddressBook}>
-              Save to Address Book
+            <button
+              className={classes.btn}
+              onClick={handleSaveToAddressBook}
+            >
+              {routeId ? "Update Address" : "Save to Address Book"}
             </button>
           </div>
         )}

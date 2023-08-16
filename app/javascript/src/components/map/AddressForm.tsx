@@ -4,22 +4,21 @@ import { createUseStyles } from "react-jss";
 
 interface IProps {
   onValidSubmit: (startAddress: string, endAddress: string) => void;
-  initialStartAddress?: string;
-  initialEndAddress?: string;
+  startAddress: string;
+  endAddress: string;
+  onStartAddressChange: (value: string) => void;
+  onEndAddressChange: (value: string) => void;
 }
 
 const AddressForm: React.FC<IProps> = ({
   onValidSubmit,
-  initialStartAddress,
-  initialEndAddress,
+  startAddress,
+  endAddress,
+  onStartAddressChange,
+  onEndAddressChange,
 }) => {
   const classes = useStyles();
   const googleMapsKey = process.env.GOOGLE_MAPS_API_KEY;
-
-  const [startAddress, setStartAddress] = useState<string>(
-    initialStartAddress || "",
-  );
-  const [endAddress, setEndAddress] = useState<string>(initialEndAddress || "");
 
   const isValidAddress = async (address: string): Promise<boolean> => {
     const response = await fetch(
@@ -58,14 +57,14 @@ const AddressForm: React.FC<IProps> = ({
         className={classes.input}
         type="text"
         value={startAddress}
-        onChange={(e) => setStartAddress(e.target.value)}
+        onChange={(e) => onStartAddressChange(e.target.value)}
         placeholder="Starting Address"
       />
       <input
         className={classes.input}
         type="text"
         value={endAddress}
-        onChange={(e) => setEndAddress(e.target.value)}
+        onChange={(e) => onEndAddressChange(e.target.value)}
         placeholder="Ending Address"
       />
       <input
