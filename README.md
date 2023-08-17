@@ -22,20 +22,19 @@ cd rails_map_project
 ```
 #### Install dependencies:
 
-Install the required Ruby gems:
+###### Install the required Ruby gems:
 
 ```bash
 bundle install
 ```
 
-Install JavaScript packages (if you're using Webpacker):
+###### Install JavaScript packages:
 
 ```bash
 yarn install
 ```
 
 #### Setup the database:
-
 This will create the database, run migrations.
 
 ```bash
