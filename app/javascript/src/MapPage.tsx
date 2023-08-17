@@ -108,11 +108,17 @@ const MapPage: React.FC = () => {
     setRouteData((prevData) => ({ ...prevData, title: newTitle }));
   };
 
-  const saveMutation = useMutation(saveRouteData);
-
-  const updateMutation = useMutation((newRouteData: RouteData) =>
-    updateUserAddress(Number(routeId), newRouteData),
-  );
+  const saveMutation = useMutation((newRouteData: RouteData) => saveRouteData(newRouteData), {
+    onSuccess: () => {
+      navigate("/list");
+    }
+  });
+  
+  const updateMutation = useMutation((newRouteData: RouteData) => updateUserAddress(Number(routeId), newRouteData), {
+    onSuccess: () => {
+      navigate("/list");
+    }
+  });
 
   const handleSaveToAddressBook = (e: FormEvent) => {
     e.preventDefault();
@@ -121,7 +127,6 @@ const MapPage: React.FC = () => {
     } else {
       saveMutation.mutate(routeData);
     }
-    navigate("/list");
   };
 
   return (

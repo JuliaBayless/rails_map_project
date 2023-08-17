@@ -28,8 +28,8 @@
 #  image                  :string
 #
 class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  has_many :distance_calculations
+
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
          :confirmable, :lockable, :timeoutable, :trackable,
@@ -45,5 +45,4 @@ class User < ApplicationRecord
       validates :uid, presence: true
     end
   end
-  has_many :distance_calculations
 end

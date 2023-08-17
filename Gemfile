@@ -86,7 +86,6 @@ group :test do
   gem "selenium-webdriver"
   gem "webdrivers"
   gem 'shoulda-matchers'
-
 end
 
 gem "omniauth", "~> 2.1"
